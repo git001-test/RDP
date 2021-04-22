@@ -33,6 +33,11 @@ jobs:
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+    - name: Removing Hyper-v
+      run: |
+        Disable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-Hypervisor -All
+        DISM /Online /Disable-Feature:Microsoft-Hyper-V
+        bcdedit /set hypervisorlaunchtype off
     - name: Create Tunnel
       run: sc start ngrok
     - name: Connect to your RDP CPU 2 Core - 7GB Ram - 255 SSD.
